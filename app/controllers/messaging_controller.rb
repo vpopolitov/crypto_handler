@@ -40,15 +40,16 @@ class MessagingController < ApplicationController
       end
     end
 
-    #response.headers['Content-Type'] = 'video/mp4'
-    #typhoeus_request.on_body do |chunk|
-    #  response.stream.write chunk
-    #end
-
+    response.headers['Content-Type'] = 'video/mp4'
+    typhoeus_request.on_body do |chunk|
+      response.stream.write chunk
+    end
     typhoeus_request.run
-    typhoeus_response = typhoeus_request.response
-    send_data typhoeus_response.body, type: 'video/mp4', disposition: 'inline'
-    #response.stream.close
+    
+    #typhoeus_response = typhoeus_request.response
+    #send_data typhoeus_response.body, type: 'video/mp4', disposition: 'inline'
+    
+    response.stream.close
   end
   
   private

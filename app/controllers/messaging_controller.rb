@@ -12,19 +12,9 @@ class MessagingController < ApplicationController
     private_key  = crypto_storage['private_key']
     client_email = crypto_storage['client_email']
     pass_phrase  = crypto_storage['pass_phrase']
-    
-    $stderr.puts private_key
-    $stderr.puts client_email
-    $stderr.puts pass_phrase
 
-    begin
     key = OpenSSL::PKey::RSA.new private_key, pass_phrase    
-    service_account = Google::APIClient::JWTAsserter.new(client_email, SCOPE, key)
-    rescue Exception => e
-    $stderr.puts 'ERROR!!!'
-    $stderr.puts e
-    end
-    
+    service_account = Google::APIClient::JWTAsserter.new(client_email, SCOPE, key)    
         
     client = Google::APIClient.new
     client.authorization = service_account.authorize

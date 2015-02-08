@@ -28,19 +28,29 @@ class MessagingController < ApplicationController
     typhoeus_response = typhoeus_request.response
     body = JSON.parse(typhoeus_response.body)
     file = body['items'].find { |i| i['title'] == 'inhibited-island.mp4' }
+    
+    typhoeus_request_headers = { Authorization: "Bearer #{access_token}" }
+    start = params[:start]
+    response.headers['Content-Type'] = 'video/mp4'
+    
+    if start
+      file_size = file['fileSize'].to_i
+      finish    = file_size - 1
+      typhoeus_request_headers[:Range] = "bytes=#{start}-"
+      response.headers['Content-Range']  = "bytes #{start}-#{finish}/#{file_size}"
+      response.status = 206
+    end
 
     typhoeus_request = Typhoeus::Request.new(
       file['downloadUrl'],
-      headers: { Authorization: "Bearer #{access_token}" }
+      headers: typhoeus_request_headers
     )
 
     typhoeus_request.on_headers do |res|
-      if res.code != 200
+      if res.code < 200 && res.code >= 300
         raise "Request failed"
       end
-    end
-
-    response.headers['Content-Type'] = 'video/mp4'
+    end  
     typhoeus_request.on_body do |chunk|
       response.stream.write chunk
     end

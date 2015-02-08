@@ -27,7 +27,8 @@ class MessagingController < ApplicationController
     typhoeus_request.run
     typhoeus_response = typhoeus_request.response
     body = JSON.parse(typhoeus_response.body)
-    file = body['items'].find { |i| i['title'] == 'inhibited-island.mp4' }
+    #file = body['items'].find { |i| i['title'] == 'inhibited-island.mp4' }
+    file = body['items'].find { |i| i['title'] == 'sintel-480.mp4' }
     
     typhoeus_request_headers = { Authorization: "Bearer #{access_token}" }
     start = params[:start]

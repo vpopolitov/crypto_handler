@@ -8,6 +8,18 @@ class MessagingController < ApplicationController
   FILES_ADDRESS = 'https://www.googleapis.com/drive/v2/files'
   SCOPE = 'https://www.googleapis.com/auth/drive'
   
+  def hls
+    file_name = params[:file_name]
+    $stderr.puts file_name
+    type = case File.extname(file_name)
+      when '.m3u8'
+        'application/x-mpegurl'
+      when '.ts'
+        'video/mp2t'
+    end
+    send_data File.read(Rails.root.join('public', file_name)), type: type, disposition: 'inline'
+  end
+  
   def send_message
     private_key  = crypto_storage['private_key']
     client_email = crypto_storage['client_email']
@@ -52,16 +64,16 @@ class MessagingController < ApplicationController
         raise "Request failed"
       end
     end  
-    typhoeus_request.on_body do |chunk|
-      response.stream.write chunk
-    end
-    typhoeus_request.on_complete do |response|
-      response.stream.close
-    end
+    #typhoeus_request.on_body do |chunk|
+    #  response.stream.write chunk
+    #end
+    #typhoeus_request.on_complete do |response|
+    #  response.stream.close
+    #end
     typhoeus_request.run
     
-    #typhoeus_response = typhoeus_request.response
-    #send_data typhoeus_response.body, type: 'video/mp4', disposition: 'inline'
+    typhoeus_response = typhoeus_request.response
+    send_data typhoeus_response.body, type: 'video/mp4', disposition: 'inline'
   end
   
   private

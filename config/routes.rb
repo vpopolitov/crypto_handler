@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'messaging' => 'messaging#send_message'
+  get 'hls/:file_name' => 'messaging#hls', constraints: { file_name: /[\w\.]+/ }
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

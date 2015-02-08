@@ -44,12 +44,13 @@ class MessagingController < ApplicationController
     typhoeus_request.on_body do |chunk|
       response.stream.write chunk
     end
+    typhoeus_request.on_complete do |response|
+      response.stream.close
+    end
     typhoeus_request.run
     
     #typhoeus_response = typhoeus_request.response
     #send_data typhoeus_response.body, type: 'video/mp4', disposition: 'inline'
-    
-    response.stream.close
   end
   
   private

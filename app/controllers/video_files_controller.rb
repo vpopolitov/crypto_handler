@@ -51,6 +51,7 @@ class VideoFilesController < ApplicationController
     typhoeus_request.run
     
     typhoeus_response = typhoeus_request.response
+    $stderr.puts typhoeus_response.code
     send_data typhoeus_response.body, type: type, disposition: 'inline'
   end
   

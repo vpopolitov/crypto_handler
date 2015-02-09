@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   get 'messaging' => 'messaging#send_message'
-  get 'hls/:file_name' => 'messaging#hls', constraints: { file_name: /[\w\.]+/ }
+  # get 'hls/:file_name' => 'messaging#hls', constraints: { file_name: /[\w\.]+/ }
+  
+  resources :videos, only: :index, param: :title do
+    resources :video_files, only: :show, param: :file_name, constraints: { file_name: /[\w\.]+/ }
+  end
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

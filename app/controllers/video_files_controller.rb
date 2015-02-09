@@ -11,6 +11,13 @@ class VideoFilesController < ApplicationController
     video_file = VideoFile.find_by video_id: video.id, name: file_name
     url = video_file.download_url
     
+    type = case File.extname(file_name)
+      when '.m3u8'
+        'application/x-mpegurl'
+      when '.ts'
+        'video/mp2t'
+    end
+    
     private_key  = crypto_storage['private_key']
     client_email = crypto_storage['client_email']
     pass_phrase  = crypto_storage['pass_phrase']
@@ -21,17 +28,20 @@ class VideoFilesController < ApplicationController
     client = Google::APIClient.new
     client.authorization = service_account.authorize
     access_token = client.authorization.access_token
+    
+    $stderr.puts access_token
+    $stderr.puts url
 
     typhoeus_request = Typhoeus::Request.new(
       url,
       headers: { Authorization: "Bearer #{access_token}" }
     )
     
-    typhoeus_request.on_headers do |res|
-      if res.code < 200 && res.code >= 300
-        raise "Request failed"
-      end
-    end  
+    #typhoeus_request.on_headers do |res|
+    #  if res.code < 200 && res.code >= 300
+    #    raise "Request failed"
+    #  end
+    #end  
     #typhoeus_request.on_body do |chunk|
     #  response.stream.write chunk
     #end
@@ -41,12 +51,6 @@ class VideoFilesController < ApplicationController
     typhoeus_request.run
     
     typhoeus_response = typhoeus_request.response
-    type = case File.extname(file_name)
-      when '.m3u8'
-        'application/x-mpegurl'
-      when '.ts'
-        'video/mp2t'
-    end
     send_data typhoeus_response.body, type: type, disposition: 'inline'
   end
   

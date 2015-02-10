@@ -44,3 +44,4 @@ gem 'spring',        group: :development
 
 gem 'google-api-client'
 gem 'typhoeus'
+gem 'rails_12factor', group: :production

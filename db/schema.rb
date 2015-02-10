@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150209203146) do
+ActiveRecord::Schema.define(version: 20150210205015) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "video_files", force: true do |t|
     t.string   "name"
-    t.text     "download_url"
+    t.string   "google_disk_id"
     t.integer  "video_id"
     t.datetime "created_at"
     t.datetime "updated_at"

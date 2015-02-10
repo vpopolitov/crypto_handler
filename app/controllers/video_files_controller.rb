@@ -28,9 +28,6 @@ class VideoFilesController < ApplicationController
     client = Google::APIClient.new
     client.authorization = service_account.authorize
     access_token = client.authorization.access_token
-    
-    $stderr.puts access_token
-    $stderr.puts url
 
     typhoeus_request = Typhoeus::Request.new(
       url,
@@ -51,7 +48,6 @@ class VideoFilesController < ApplicationController
     typhoeus_request.run
     
     typhoeus_response = typhoeus_request.response
-    $stderr.puts typhoeus_response.code
     send_data typhoeus_response.body, type: type, disposition: 'inline'
   end
   

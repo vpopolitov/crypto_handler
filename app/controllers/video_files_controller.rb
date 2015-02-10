@@ -28,6 +28,9 @@ class VideoFilesController < ApplicationController
     client = Google::APIClient.new
     client.authorization = service_account.authorize
     access_token = client.authorization.access_token
+    
+    $stderr.puts access_token
+    $stderr.puts url
 
     typhoeus_request = Typhoeus::Request.new(
       url,

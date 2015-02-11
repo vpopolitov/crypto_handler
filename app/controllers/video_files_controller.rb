@@ -64,6 +64,7 @@ class VideoFilesController < ApplicationController
   def access_token
     $stderr.puts ENV["ACCESS_TOKEN"].nil?
     $stderr.puts ENV["ACCESS_TOKEN"]
+    $stderr.puts ENV.keys
     ENV["ACCESS_TOKEN"] ||= retrieve_access_token
   end
   

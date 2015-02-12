@@ -1,4 +1,30 @@
 class VideoFilesController < ApplicationController
+
+  def show
+    video = Video.find_by title: params[:video_title]
+    file_name = params[:file_name]
+    video_file = VideoFile.find_by video_id: video.id, name: file_name
+    google_disk_id = video_file.google_disk_id
+    
+    drive = GoogleApiClient.get_drive
+    
+    file_info = GoogleApiClient.execute api_method: drive.files.get, 
+      parameters: { fileId: google_disk_id }
+      
+    res = GoogleApiClient.execute uri: file_info.data.download_url
+    
+    type = case File.extname(file_name)
+      when '.m3u8'
+        'application/x-mpegurl'
+      when '.ts'
+        'video/mp2t'
+    end
+    
+    send_data res.body, type: type, disposition: 'inline'
+  end
+
+
+
   require 'google/api_client'
   require 'typhoeus'
   
@@ -6,7 +32,7 @@ class VideoFilesController < ApplicationController
   SCOPE = 'https://www.googleapis.com/auth/drive'
   GOOGLE_GET_FILE_URL = 'https://www.googleapis.com/drive/v2/files/'
   
-  def show
+  def old_show
     video = Video.find_by title: params[:video_title]
     file_name = params[:file_name]
     video_file = VideoFile.find_by video_id: video.id, name: file_name

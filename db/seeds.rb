@@ -17,4 +17,9 @@ ActiveRecord::Base.transaction do
   VideoFile.create name: '4.ts', google_disk_id: '0B6SbkWXOHDMKT242aWhCdXU3VkE', video_id: video.id
   VideoFile.create name: '5.ts', google_disk_id: '0B6SbkWXOHDMKd3ZZbXN1V0pyTUE', video_id: video.id
   VideoFile.create name: '6.ts', google_disk_id: '0B6SbkWXOHDMKYUF6Yk5KQ1BZMXc', video_id: video.id
+  
+  video = Video.create title: 'scissors', description: 'This is our protected test HLS video'
+  VideoFile.create name: 'out.m3u8', google_disk_id: '0B6SbkWXOHDMKc1B4R085dVhyMG8', video_id: video.id
+  VideoFile.create name: 'stream0.ts', google_disk_id: '0B6SbkWXOHDMKRTJ5RGduenhWXzg', video_id: video.id
+  VideoFile.create name: 'stream1.ts', google_disk_id: '0B6SbkWXOHDMKOWFHQ1dRbnE1NE0', video_id: video.id
 end

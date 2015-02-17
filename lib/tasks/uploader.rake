@@ -88,8 +88,6 @@ namespace :uploader do
     Rails.logger.info 'Files moving finished'
   end
   
-  desc ''
-  task :
 
 
 

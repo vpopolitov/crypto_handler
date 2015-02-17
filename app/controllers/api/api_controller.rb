@@ -9,6 +9,8 @@ class Api::ApiController < ActionController::API
   
   def restrict_access
     authenticate_or_request_with_http_token do |token, _|
+      puts token
+      puts Rails.application.secrets.api_access_token
       Rails.application.secrets.api_access_token == token
     end
   end

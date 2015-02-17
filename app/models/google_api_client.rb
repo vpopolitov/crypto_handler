@@ -14,19 +14,23 @@ class GoogleApiClient
   class << self
     def get_drive
       drive = nil
-      if File.exists? CACHED_API_FILE
+      if File.exists? cached_file
         $stderr.puts 'drive api from cache'
-        File.open(CACHED_API_FILE) do |file|
+        File.open(cached_file) do |file|
           drive = Marshal.load(file)
         end
       else
         $stderr.puts 'drive api retrieving from server'
         drive = client.discovered_api('drive', API_VERSION)
-        File.open(CACHED_API_FILE, 'w') do |file|
+        File.open(cached_file, 'w') do |file|
           Marshal.dump(drive, file)
         end
       end
       drive
+    end
+    
+    def rewind
+      @client = nil
     end
     
     private
@@ -73,6 +77,10 @@ class GoogleApiClient
     def crypto_storage
       @crypto_storage ||= JSON.load(
         ENV["CRYPTO_STORAGE"] || File.open(Rails.root.join(CRYPTO_STORAGE_NAME)))
+    end
+    
+    def cached_file
+      Rails.root.join(CACHED_API_FILE)
     end
   end
 end

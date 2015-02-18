@@ -1,6 +1,6 @@
 class Api::VideosController < Api::ApiController
   def create
-    if Video.find_by title: video_params[:title], google_drive_id = video_params[:google_drive_id]
+    if Video.find_by title: video_params[:title], google_drive_id: video_params[:google_drive_id]
       Video.update(video_params)
     else
       Video.create(video_params)

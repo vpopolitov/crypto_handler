@@ -11,24 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150210205015) do
+ActiveRecord::Schema.define(version: 20150217220459) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "video_files", force: true do |t|
-    t.string   "name"
-    t.string   "google_disk_id"
-    t.integer  "video_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "trashes", force: true do |t|
+    t.string "name",  limit: 20
+    t.text   "value"
   end
+
+  add_index "trashes", ["name"], name: "trashes_name_idx", using: :btree
 
   create_table "videos", force: true do |t|
     t.string   "title"
-    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "google_drive_id"
   end
 
 end

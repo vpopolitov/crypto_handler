@@ -1,6 +1,26 @@
 class VideoFilesController < ApplicationController
 
   def show
+    video = Video.find params[:video_id]
+    file_name = params[:file_name]
+    folder_id = video.google_drive_id
+  
+    drive = GoogleApiClient.get_drive
+    res = GoogleApiClient.execute api_method: drive.files.list,
+      parameters: { q: "'#{folder_id}' in parents and title = '#{file_name}'" }
+      
+    res = GoogleApiClient.execute uri: res.data.items.first.downloadUrl
+    type = case File.extname(file_name)
+      when '.m3u8'
+        'application/x-mpegurl'
+      when '.ts'
+        'video/mp2t'
+    end
+    
+    send_data res.body, type: type, disposition: 'inline'
+  end
+
+  def old_show
     video = Video.find_by title: params[:video_title]
     file_name = params[:file_name]
     video_file = VideoFile.find_by video_id: video.id, name: file_name

@@ -1,5 +1,6 @@
 require 'rake'
 require 'json'
+require 'faraday'
 
 class Trash < ActiveRecord::Base
 end
@@ -29,6 +30,8 @@ namespace :uploader do
   SSL_CMD = <<-CMD
   openssl aes-128-cbc -e -in %{split_file_prefix}%{i}.ts -out %{encrypted_split_file_prefix}%{i}.ts -nosalt -iv %{initialization_vector} -K %{encryption_key}
   CMD
+  
+  API_UPDATE_URL = "#{ENV['APP_URL']}/api/videos"
 
   desc 'Sets up logging - should only be called from other rake tasks'
   task setup_logger: :environment do
@@ -37,8 +40,8 @@ namespace :uploader do
     Rails.logger     = logger
   end
 
-  # before run task call smth like sudo mount -t vboxsf wind_temp ~/windows_share
-  # run as rake uploader:upload['../test','~/windows_share/dest','big_buck_bunny.avi','test_folder']  
+  # before run task call smth like sudo mount -t vboxsf -o rw,uid=1000,gid=1000,dmode=755,fmode=644 wind_temp ~/windows_share
+  # run as rake uploader:upload['../test','~/windows_share/google_drive/video','big_buck_bunny.avi','мульт про кролика']
   desc 'Create hls video, encrypt chunks, upload them to google disk and write info to db'
   task :upload, [:working_dir, :dest_dir, :video_file, :video_name, :key_file] => :setup_logger do |t, args|
     working_dir = File.expand_path args[:working_dir]
@@ -88,6 +91,24 @@ namespace :uploader do
     Rails.logger.info 'Files moving finished'
   end
   
+  # run as APP_URL='http://stormy-coast-4639' rake uploader:db_update['мульт про кролика']
+  desc 'Go to Google disk, search video folder by name and write folder id to db'
+  task :db_update, [:video_name] => :setup_logger do |t, args|
+    video_name = args[:video_name]
+
+    Rails.logger.info 'Start fetching folder id by name'
+    drive = GoogleApiClient.get_drive
+    google_res = GoogleApiClient.execute(api_method: drive.files.list, parameters: { q: "mimeType = 'application/vnd.google-apps.folder' and title = '#{video_name}'" })
+    folder_id = google_res.data.items.first.id    
+    Rails.logger.info 'Folder id is taken. Write to db'
+    
+    api_access_token = Rails.application.secrets.api_access_token
+    res = Faraday.new.post API_UPDATE_URL do |req|
+      req.headers['Authorization'] = "Token token=#{api_access_token}"
+      req.body = {video: { title: video_name, google_drive_id: folder_id }}
+    end
+    Rails.logger.info 'Info is inserted to db'
+  end
 
 
 

@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
-  # get 'messaging' => 'messaging#send_message'
-  # get 'hls/:file_name' => 'messaging#hls', constraints: { file_name: /[\w\.]+/ }
+  resources :categories, except: :show
   
-  resources :videos, only: :index do
+  resources :videos, only: :show do
     resources :video_files, only: :show, param: :file_name, constraints: { file_name: /[\w\.]+/ }
   end
   

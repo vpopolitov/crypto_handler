@@ -1,0 +1,68 @@
+<div class="jumbotron">
+  <div class="container">
+    <h1>Курс лекций</h1>
+    <p>Школа кройки и шитья "Престиж" представляет курс онлайн-лекций</p>
+  </div>
+</div>
+
+<% @categories.each_with_index do |category, i| %>
+    <div class="panel panel-default center">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#category-<%= i %>" class="category-title" id="category-title-<%= i %>"
+             data-type="text" data-pk="<%= category.id %>" data-resource="category" data-name="title"
+             data-url="<%= api_category_path(category) %>">
+            <%= category.title %>
+          </a>
+        </h3>
+        <button id="category-edit-<%= i %>" class="btn btn-primary">Редактировать</button>
+        <button class="btn btn-danger">Удалить</button>
+      </div>
+      <div id="category-<%= i %>" class="panel-collapse collapse">
+        <div class="panel-body">
+          <ul class="list-group">
+            <% category.videos.each do |video| %>
+              <li class="list-group-item">
+                <div class="video-title"><%= video.title %></div>
+                <button class="btn btn-danger">Удалить</button>
+              </li>
+            <% end %>
+          </ul>
+
+          <div class="panel panel-default add-category">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <a class="btn btn-primary" data-toggle="collapse" href="#new-category-<%= i %>">
+                  Добавить урок
+                </a>
+              </h3>
+            </div>
+            <div id="new-category-<%= i %>" class="panel-collapse collapse">
+              <div class="panel-body">
+                <label id="new-category-name-title" for="new-category-name">Название:</label>
+                <a href="#" class="new-video-name" data-type="select" data-placeholder="Обязательно"></a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<div class="panel panel-default center add-category">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <a class="btn btn-primary" data-toggle="collapse" href="#new-category">
+        Добавить категорию
+      </a>
+    </h3>
+  </div>
+  <div id="new-category" class="panel-collapse collapse">
+    <div class="panel-body">
+      <label id="new-category-name-title" for="new-category-name">Название:</label>
+      <a href="#" id="new-category-name" data-placeholder="Обязательно"
+         data-resource="category" data-name="title" data-url="<%= api_categories_path %>"></a>
+    </div>
+  </div>
+</div>

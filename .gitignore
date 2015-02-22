@@ -17,3 +17,4 @@
 crypto-storage.*
 *.cache
 video.key
+.idea

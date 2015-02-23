@@ -12,14 +12,11 @@
                 class="btn btn-danger category-delete">Удалить</button>
     </div>
 
-    <div id="category-{{index}}" class="panel-collapse collapse">
+    <div id="category-{{index}}" class="videos panel-collapse collapse">
         <div class="panel-body">
             <ul class="list-group">
                 {{#each category.videos}}
-                <li class="list-group-item">
-                    <div class="video-title">{{title}}</div>
-                    <button class="btn btn-danger">Удалить</button>
-                </li>
+                    {{> videos/_video video=this index=@index }}
                 {{/each}}
             </ul>
 
@@ -33,8 +30,8 @@
                 </div>
                 <div id="new-category-{{index}}" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <label id="new-category-name-title" for="new-category-name">Название:</label>
-                        <a href="#" class="new-video-name" data-type="select" data-placeholder="Обязательно"></a>
+                        <label id="new-category-name-title" for="new-category-{{index}}-name">Название:</label>
+                        <a href="#" id="new-category-{{index}}-name" class="new-video-name" data-type="select" data-placeholder="Обязательно"></a>
                     </div>
                 </div>
             </div>

@@ -66,36 +66,31 @@ $(function() {
             }
         });
 
-        $('#click-btn').click(function () {
-            $('#new-category-name').editable('submit', {
-                ajaxOptions: {
-                    type: 'post',
-                    beforeSend: function (xhr, settings) {
-                        var data = $.deparam(settings.data);
-                        data.authenticity_token = $('meta[name=csrf-token]').attr('content');
-                        settings.data = $.param(data);
-                        return true;
-                    }
-                },
-                success: function (response) {
-                    $('#msg').removeClass('alert-error').html('').hide();
-                    $(this).editable('setValue', null);
+        var prevValue = null;
+        $('#new-category-0-name').editable({
+//            source: [
+//                {value: 1, text: 'Active', video: { id: 1, title: 'Active' }},
+//                {value: 2, text: 'Blocked', video: { id: 2, title: 'Blocked' }},
+//                {value: 3, text: 'Deleted', video: { id: 3, title: 'Deleted' }}
+//            ],
+            source: Routes.api_videos_path,
+            sourceCache: false,
+            validate: function (value) {
+                if ($.trim(value) == '') return 'Необходимо заполнить это поле';
+            },
+            display: function(value, sourceData) {
+                if (value && prevValue != value) {
+                    prevValue = value;
+                    $(this).data('editable').setValue(null);
                     $(this).removeClass('editable-unsaved');
-                    var context = { category: response, index: $('.category-title').size() }
-                    $('#categories').append(HandlebarsTemplates['categories/show'](context));
-                    bindCategory(context.index);
-                    $('#new-category').collapse('toggle');
-                },
-                error: function(errors) {
-                    var msg = '';
-                    if(errors && errors.responseText) { //ajax error, errors = xhr object
-                        msg = errors.responseText;
-                    } else { //validation error (client-side or server-side)
-                        $.each(errors, function(k, v) { msg += k+": "+v+"<br>"; });
-                    }
-                    $('#msg').removeClass('alert-success').addClass('alert-danger').html(msg).show();
+                    selectedItem = sourceData.filter(function(i) { return i.value == value; })[0]
+                    var context = { video: selectedItem.video, index: $('.category-title').size() }
+                    $(this).closest('.videos').find('.list-group').append(HandlebarsTemplates['videos/show'](context));
+//                    bindCategoryTitle(context.index);
+//                    bindCategoryDelete(context.index);
+                    $(this).closest('.panel-collapse').collapse('toggle');
                 }
-            });
+            }
         });
     });
 });

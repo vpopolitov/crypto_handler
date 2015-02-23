@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   
   namespace :api do
     resources :videos, only: :create
-    resources :categories, only: [:create, :update, :destroy]
+    resources :categories, only: [:index, :create, :update, :destroy]
   end
   
   # The priority is based upon order of creation: first created -> highest priority.

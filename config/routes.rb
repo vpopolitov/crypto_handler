@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   resources :categories, only: :index
+  resources :sessions, only: [:new, :create, :destroy]
   
   resources :videos, only: :show do
     resources :video_files, only: :show, param: :file_name, constraints: { file_name: /[\w\.]+/ }
@@ -9,6 +10,9 @@ Rails.application.routes.draw do
     resources :videos, only: [:index, :create, :update, :destroy]
     resources :categories, only: [:index, :create, :update, :destroy]
   end
+
+  get '/signin'  => 'sessions#new'
+  delete '/signout' => 'sessions#destroy'
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

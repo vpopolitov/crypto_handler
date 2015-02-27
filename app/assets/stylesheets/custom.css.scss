@@ -1,0 +1,50 @@
+@import "bootstrap";
+
+@mixin div-with-button {
+  display: inline-block;
+  width: 25%;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+.center {
+  width: 75%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.panel-heading {
+  .panel-title {
+    @include div-with-button;
+    a { text-decoration: none; }
+  }
+}
+
+.panel-body {
+  .video-title {
+    @include div-with-button;
+  }
+}
+
+.add-category {
+  a.btn {
+    color: white;
+  }
+
+  label#new-category-name-title {
+    vertical-align: top;
+    margin-right: 20px;
+  }
+
+  a.custom-editable-empty {
+    text-decoration: none;
+    border-bottom: none;
+    color: $gray-dark;
+  }
+
+  #msg {
+    display: none;
+  }
+}

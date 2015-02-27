@@ -11,23 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150217220459) do
+ActiveRecord::Schema.define(version: 20150220210114) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "trashes", force: true do |t|
-    t.string "name",  limit: 20
-    t.text   "value"
+  create_table "categories", force: true do |t|
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
-
-  add_index "trashes", ["name"], name: "trashes_name_idx", using: :btree
 
   create_table "videos", force: true do |t|
     t.string   "title"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "google_drive_id"
+    t.integer  "category_id"
   end
 
 end

@@ -13,4 +13,11 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require bootstrap-sprockets
+//= require bootstrap-editable
+//= require bootstrap-editable-rails
+//= require jquery-deparam.min.js
+//= require handlebars.runtime
+//= require js-routes
+//= require_tree ./templates
 //= require_tree .

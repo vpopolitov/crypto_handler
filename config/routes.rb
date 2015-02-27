@@ -1,14 +1,13 @@
 Rails.application.routes.draw do
-  # get 'messaging' => 'messaging#send_message'
-  # get 'hls/:file_name' => 'messaging#hls', constraints: { file_name: /[\w\.]+/ }
+  resources :categories, only: :index
   
-  resources :videos, only: :index do
+  resources :videos, only: :show do
     resources :video_files, only: :show, param: :file_name, constraints: { file_name: /[\w\.]+/ }
   end
   
   namespace :api do
-    #post 'videos/upload', to: 'videos#upload'
-    resource :videos, only: :create
+    resources :videos, only: [:index, :create, :update, :destroy]
+    resources :categories, only: [:index, :create, :update, :destroy]
   end
   
   # The priority is based upon order of creation: first created -> highest priority.

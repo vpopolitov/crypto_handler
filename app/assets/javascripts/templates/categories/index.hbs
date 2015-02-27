@@ -1,0 +1,7 @@
+<div id="categories">
+    {{#each categories}}
+        {{> categories/_category category=this index=@index }}
+    {{/each}}
+</div>
+
+{{> categories/_add }}

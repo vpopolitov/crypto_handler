@@ -30,6 +30,7 @@ class Api::CategoriesController < Api::ApiController
     category = Category.find_by id: params[:id]
     if category
       category.destroy
+      Video.where(category_id: category.id).update_all(category_id: nil)
       head :no_content
     else
       render json: 'Error!', status: :unprocessable_entity

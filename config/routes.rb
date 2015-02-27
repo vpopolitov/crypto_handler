@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   end
   
   namespace :api do
-    resources :videos, only: [:index, :create]
+    resources :videos, only: [:index, :create, :update, :destroy]
     resources :categories, only: [:index, :create, :update, :destroy]
   end
   

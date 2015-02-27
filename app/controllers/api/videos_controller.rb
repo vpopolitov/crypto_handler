@@ -14,6 +14,26 @@ class Api::VideosController < Api::ApiController
     end
     head :no_content
   end
+
+  def update
+    video = Video.find_by id: params[:id]
+    if video && video.update(category_id: params[:category_id])
+      #head :no_content
+      render json: video, serializer: VideoSerializer, root: false, status: :ok
+    else
+      render json: 'Error!', status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    video = Video.find_by id: params[:id]
+    if video
+      video.update category_id: nil
+      head :no_content
+    else
+      render json: 'Error!', status: :unprocessable_entity
+    end
+  end
   
   private
   

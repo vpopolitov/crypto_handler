@@ -1,15 +1,14 @@
-<div class="panel panel-default center">
+<div class="panel panel-default center item-for-delete">
     <div class="panel-heading">
         <h3 class="panel-title">
-            <a data-toggle="collapse" href="#category-{{index}}" class="category-title" id="category-title-{{index}}"
-               data-type="text" data-pk="{{category.id}}" data-resource="category" data-name="title"
+            <a data-toggle="collapse" href="#category-{{index}}" class="category-title"
+               data-type="text" data-resource="category" data-name="title"
                 data-url="{{api_category_path category.id}}">
                 {{category.title}}
             </a>
         </h3>
-        <button id="category-edit-{{index}}" class="btn btn-primary">Редактировать</button>
-        <button id="category-delete-{{index}}" data-url="{{api_category_path category.id}}"
-                class="btn btn-danger category-delete">Удалить</button>
+        <button class="category-edit btn btn-primary">Редактировать</button>
+        <button data-url="{{api_category_path category.id}}" class="btn btn-danger category-delete">Удалить</button>
     </div>
 
     <div id="category-{{index}}" class="videos panel-collapse collapse">
@@ -23,15 +22,17 @@
             <div class="panel panel-default add-category">
                 <div class="panel-heading">
                     <h3 class="panel-title">
-                        <a class="btn btn-primary" data-toggle="collapse" href="#new-category-{{index}}">
+                        <a class="btn btn-primary" data-toggle="collapse" href="#new-video-{{index}}">
                             Добавить урок
                         </a>
                     </h3>
                 </div>
-                <div id="new-category-{{index}}" class="panel-collapse collapse">
+                <div id="new-video-{{index}}" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <label id="new-category-name-title" for="new-category-{{index}}-name">Название:</label>
-                        <a href="#" id="new-category-{{index}}-name" class="new-video-name" data-type="select" data-placeholder="Обязательно"></a>
+                        <label id="new-video-name-title" for="new-video-{{index}}-name">Название:</label>
+                        <a href="#" id="new-video-{{index}}-name" class="new-video-name"
+                           data-type="select" data-placeholder="Обязательно" data-category-id="{{category.id}}"
+                           data-name="video_id"></a>
                     </div>
                 </div>
             </div>

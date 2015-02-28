@@ -1,6 +1,4 @@
 class Api::CategoriesController < Api::ApiController
-  skip_before_filter :restrict_access
-
   def index
     categories = Category.eager_load(:videos).order('videos.id').all
     render json: { categories: categories.as_json(include: :videos) }, status: :ok

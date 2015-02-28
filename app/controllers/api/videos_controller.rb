@@ -1,8 +1,5 @@
 class Api::VideosController < Api::ApiController
-  skip_before_filter :restrict_access
-
   def index
-    #render json: Video.uncategorized.map { |i| { value: i.id, text: i.title, video: i } }, status: :ok
     render json: Video.uncategorized, each_serializer: VideoSerializer, root: false, status: :ok
   end
 
@@ -18,7 +15,6 @@ class Api::VideosController < Api::ApiController
   def update
     video = Video.find_by id: params[:id]
     if video && video.update(category_id: params[:category_id])
-      #head :no_content
       render json: video, serializer: VideoSerializer, root: false, status: :ok
     else
       render json: 'Error!', status: :unprocessable_entity

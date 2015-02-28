@@ -44,4 +44,4 @@ gem 'google-api-client'
 gem 'typhoeus'
 gem 'rails_12factor', group: :production
 gem 'active_model_serializers'
-gem 'bcrypt-ruby', '~> 3.0.1'
+gem 'bcrypt', '~> 3.1.0'

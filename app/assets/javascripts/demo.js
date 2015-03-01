@@ -36,11 +36,11 @@ $(function() {
     }
 
     var rebindAddVideo = function () {
-        var prevValue = null;
         var video = null;
         $('.new-video-name').editable({
             source: Routes.api_videos_path,
             sourceCache: false,
+            emptytext: 'Не выбрано',
             validate: function (value) {
                 if ($.trim(value) == '') return 'Необходимо заполнить это поле';
             },
@@ -58,8 +58,7 @@ $(function() {
                 video = response.video;
             },
             display: function (value, sourceData) {
-                if (value && prevValue != value) {
-                    prevValue = value;
+                if (value) {
                     $(this).data('editable').setValue(null);
                     $(this).removeClass('editable-unsaved');
                     var context = { video: video, signed_in: self.signed_in, index: $('.category-title').size() }
@@ -83,8 +82,7 @@ $(function() {
             ajaxOptions: {
                 type: 'post'
             },
-            emptytext: '!fdfdfdfdfdfdf!!',
-            emptyclass: 'custom-editable-empty',
+            emptytext: 'Не выбрано',
             validate: function (value) {
                 if ($.trim(value) == '') return 'Необходимо заполнить это поле';
             },

@@ -5,6 +5,12 @@
   width: 25%;
 }
 
+@mixin custom-editable {
+  border-bottom: none;
+  color: $gray-dark;
+  font-style: normal;
+}
+
 html {
   overflow-y: scroll;
 }
@@ -18,7 +24,12 @@ html {
 .panel-heading {
   .panel-title {
     @include div-with-button;
-    a { text-decoration: none; }
+    a {
+      text-decoration: none;
+      &:hover {
+        color: $brand-primary;
+      }
+    }
   }
 }
 
@@ -46,5 +57,21 @@ html {
 
   #msg {
     display: none;
+  }
+}
+
+a.editable-click, a.editable-empty {
+  @include custom-editable;
+  &:hover {
+    @include custom-editable;
+    color: $brand-primary;
+  }
+}
+
+.video-title a {
+  color: $gray-dark;
+  text-decoration: none;
+  &:hover {
+    color: $brand-primary;
   }
 }

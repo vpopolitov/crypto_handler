@@ -1,7 +1,9 @@
 <div id="categories">
     {{#each categories}}
-        {{> categories/_category category=this index=@index }}
+        {{> categories/_category category=this index=@index signed_in=../signed_in }}
     {{/each}}
 </div>
 
-{{> categories/_add }}
+{{#if signed_in}}
+    {{> categories/_add }}
+{{/if}}

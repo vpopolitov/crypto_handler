@@ -1,3 +1,5 @@
+var signed_in = false;
+
 $(function() {
     $.fn.editable.defaults.mode = 'inline';
 
@@ -7,6 +9,10 @@ $(function() {
 
     Handlebars.registerHelper('api_video_path', function (id) {
         return Routes.api_video_path(id);
+    });
+
+    Handlebars.registerHelper('video_path', function (id) {
+        return Routes.video_path(id);
     });
 
     $('.category-title').editable({ toggle: 'manual' });
@@ -34,11 +40,11 @@ $(function() {
     }
 
     var rebindAddVideo = function () {
-        var prevValue = null;
         var video = null;
         $('.new-video-name').editable({
             source: Routes.api_videos_path,
             sourceCache: false,
+            emptytext: 'Не выбрано',
             validate: function (value) {
                 if ($.trim(value) == '') return 'Необходимо заполнить это поле';
             },
@@ -56,11 +62,10 @@ $(function() {
                 video = response.video;
             },
             display: function (value, sourceData) {
-                if (value && prevValue != value) {
-                    prevValue = value;
+                if (value) {
                     $(this).data('editable').setValue(null);
                     $(this).removeClass('editable-unsaved');
-                    var context = { video: video, index: $('.category-title').size() }
+                    var context = { video: video, signed_in: self.signed_in, index: $('.category-title').size() }
                     $(this).closest('.videos').find('.list-group').append(HandlebarsTemplates['videos/show'](context));
                     $(this).closest('.panel-collapse').collapse('toggle');
                 }
@@ -70,6 +75,8 @@ $(function() {
 
     $.get(Routes.api_categories_path(), function(res) {
         var temp = $('#temp');
+        signed_in = res.meta.signed_in;
+        res.signed_in = signed_in;
         temp.html(HandlebarsTemplates['categories/index'](res));
 
         newBind();
@@ -79,8 +86,7 @@ $(function() {
             ajaxOptions: {
                 type: 'post'
             },
-            emptytext: '!fdfdfdfdfdfdf!!',
-            emptyclass: 'custom-editable-empty',
+            emptytext: 'Не выбрано',
             validate: function (value) {
                 if ($.trim(value) == '') return 'Необходимо заполнить это поле';
             },
@@ -89,7 +95,7 @@ $(function() {
                     $(this).data('editable').setValue(null);
                     $('#msg').removeClass('alert-error').html('').hide();
                     $(this).removeClass('editable-unsaved');
-                    var context = { category: sourceData, index: $('.category-title').size() }
+                    var context = { category: sourceData, signed_in: self.signed_in, index: $('.category-title').size() }
                     $('#categories').append(HandlebarsTemplates['categories/show'](context));
                     $('#new-category').collapse('toggle');
                     rebindAddVideo();
@@ -98,25 +104,5 @@ $(function() {
         });
 
         rebindAddVideo();
-
-        /*var prevValue = null;
-        $('#new-video-0-name').editable({
-            source: Routes.api_videos_path,
-            sourceCache: false,
-            validate: function (value) {
-                if ($.trim(value) == '') return 'Необходимо заполнить это поле';
-            },
-            display: function(value, sourceData) {
-                if (value && prevValue != value) {
-                    prevValue = value;
-                    $(this).data('editable').setValue(null);
-                    $(this).removeClass('editable-unsaved');
-                    selectedItem = sourceData.filter(function(i) { return i.value == value; })[0]
-                    var context = { video: selectedItem.video, index: $('.category-title').size() }
-                    $(this).closest('.videos').find('.list-group').append(HandlebarsTemplates['videos/show'](context));
-                    $(this).closest('.panel-collapse').collapse('toggle');
-                }
-            }
-        });*/
     });
 });

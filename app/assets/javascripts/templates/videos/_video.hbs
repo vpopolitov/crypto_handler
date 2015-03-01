@@ -1,5 +1,7 @@
 <li class="list-group-item item-for-delete">
-    <div class="video-title">{{video.title}}</div>
+    <div class="video-title">
+        <a href="{{video_path video.id}}">{{video.title}}</a>
+    </div>
 
     {{#if signed_in}}
         <button class="btn btn-danger category-delete" data-url="{{api_video_path video.id}}">Удалить</button>

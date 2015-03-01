@@ -67,3 +67,11 @@ a.editable-click, a.editable-empty {
     color: $brand-primary;
   }
 }
+
+.video-title a {
+  color: $gray-dark;
+  text-decoration: none;
+  &:hover {
+    color: $brand-primary;
+  }
+}

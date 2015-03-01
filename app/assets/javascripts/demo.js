@@ -11,6 +11,10 @@ $(function() {
         return Routes.api_video_path(id);
     });
 
+    Handlebars.registerHelper('video_path', function (id) {
+        return Routes.video_path(id);
+    });
+
     $('.category-title').editable({ toggle: 'manual' });
 
     var newBind = function() {

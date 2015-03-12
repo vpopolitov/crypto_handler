@@ -1,0 +1,6 @@
+<%= form_for :session, url: sessions_for_videos_path do |f| %>
+    <%= f.label :access_code %>
+    <%= f.text_field :access_code %>
+
+    <%= f.submit "Войти", class: "btn btn-large btn-primary" %>
+<% end %>

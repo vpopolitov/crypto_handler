@@ -5,16 +5,8 @@ class VideosController < ApplicationController
   before_action :check_access_code, only: :show
 
   def show
-    video = Video.find params[:id]
-    folder_id = video.google_drive_id
-
-    @token = GoogleApiClient.token
-
-    drive = GoogleApiClient.get_drive
-    res = GoogleApiClient.execute api_method: drive.files.list, parameters: { q: "'#{folder_id}' in parents" }
-    @hash = res.data.items.map do |i|
-      { downloadUrl: i.downloadUrl, originalFilename: i.originalFilename }
-    end.to_json
+    @video_id = params[:id]
+    render layout: false
   end
 
   def new_session

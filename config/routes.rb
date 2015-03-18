@@ -4,10 +4,19 @@ Rails.application.routes.draw do
   
   resources :videos, only: :show do
     resources :video_files, only: :show, param: :file_name, constraints: { file_name: /[\w\.]+/ }
+    collection do
+      get  'sessions/new', to: 'videos#new_session', as: :new_session_for
+      post 'sessions', to: 'videos#create_session', as: :sessions_for
+    end
   end
   
   namespace :api do
-    resources :videos, only: [:index, :create, :update, :destroy]
+    resources :videos, only: [:index, :create, :update, :destroy] do
+      member do
+        get 'map'
+        get 'token'
+      end
+    end
     resources :categories, only: [:index, :create, :update, :destroy]
   end
 

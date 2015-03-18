@@ -32,6 +32,10 @@ class GoogleApiClient
     def rewind
       @client = nil
     end
+
+    def token
+      client.authorization.access_token
+    end
     
     private
     
@@ -42,7 +46,6 @@ class GoogleApiClient
     def get_client
       private_key  = crypto_storage['private_key']
       client_email = crypto_storage['client_email']
-      pass_phrase  = crypto_storage['pass_phrase']
 
       client = Google::APIClient.new(:application_name => 'Crypto handler',
           :application_version => '1.0.0')

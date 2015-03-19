@@ -12,18 +12,6 @@
       </Representation>
     </AdaptationSet>
     <AdaptationSet segmentAlignment="true" startWithSAP="1" bitstreamSwitching="true" mimeType="video/mp4" maxFrameRate="24000/1000" maxWidth="1024" maxHeight="436" par="1:1">
-      <Representation codecs="avc1.64001f" width="1024" height="436" frameRate="24000/1000" sar="1:1" id="vid_rep_1.mp4" bandwidth="257200">
-        <BaseURL>vid_rep_1.mp4</BaseURL>
-        <SegmentBase timescale="12288" indexRangeExact="true" indexRange="773-4152">
-          <Initialization range="44-772"/>
-        </SegmentBase>
-      </Representation>
-      <Representation codecs="avc1.64001f" width="1024" height="436" frameRate="24000/1000" sar="1:1" id="vid_rep_2.mp4" bandwidth="515300">
-        <BaseURL>vid_rep_2.mp4</BaseURL>
-        <SegmentBase timescale="12288" indexRangeExact="true" indexRange="773-4152">
-          <Initialization range="44-772"/>
-        </SegmentBase>
-      </Representation>
       <Representation codecs="avc1.64001f" width="1024" height="436" frameRate="24000/1000" sar="1:1" id="vid_rep_3.mp4" bandwidth="1032500">
         <BaseURL>vid_rep_3.mp4</BaseURL>
         <SegmentBase timescale="12288" indexRangeExact="true" indexRange="773-4152">

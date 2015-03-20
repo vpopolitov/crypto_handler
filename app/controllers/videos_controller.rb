@@ -28,7 +28,7 @@ class VideosController < ApplicationController
   def video_sign_in(video)
     cookies.signed[access_code_cookie_name(video.id)] = {
         value: video.id.to_s,
-        expires: 1.hour.from_now,
+        expires: 6.hour.from_now,
         httponly: true
     }
   end

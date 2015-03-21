@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   namespace :api do
     resources :videos, only: [:index, :create, :update, :destroy] do
       member do
+        get 'manifest'
         get 'map'
         get 'token'
       end

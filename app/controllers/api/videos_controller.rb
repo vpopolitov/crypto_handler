@@ -1,6 +1,6 @@
 class Api::VideosController < Api::ApiController
-  skip_before_filter :restrict_access, only: [:map, :token]
-  before_action :check_access_code, only: [:map, :token]
+  skip_before_filter :restrict_access, only: [:manifest, :map, :token]
+  before_action :check_access_code, only: [:manifest, :map, :token]
 
   def index
     render json: Video.uncategorized, each_serializer: VideoSerializer, root: false, status: :ok
@@ -34,14 +34,22 @@ class Api::VideosController < Api::ApiController
     end
   end
 
-  def map
-    video = Video.find params[:id]
-    folder_id = video.google_drive_id
-
-    token = GoogleApiClient.token
-
+  def manifest
     drive = GoogleApiClient.get_drive
-    res = GoogleApiClient.execute api_method: drive.files.list, parameters: { q: "'#{folder_id}' in parents" }
+    res = GoogleApiClient.execute api_method: drive.files.list, parameters: { q: "'#{google_drive_id}' in parents and title = 'Manifest.mpd'" }
+    manifest = res.data.items.first
+    res = GoogleApiClient.execute uri: manifest.download_url
+    if res.status == 200
+      render json: res.body, status: :ok
+    else
+      render json: 'Error!', status: :unprocessable_entity
+    end
+  end
+
+  def map
+    token = GoogleApiClient.token
+    drive = GoogleApiClient.get_drive
+    res = GoogleApiClient.execute api_method: drive.files.list, parameters: { q: "'#{google_drive_id}' in parents" }
     hash = res.data.items.map do |i|
       { downloadUrl: i.downloadUrl, originalFilename: i.originalFilename }
     end
@@ -58,6 +66,11 @@ class Api::VideosController < Api::ApiController
   # { video: { title: '...', google_drive_id: '...' } }
   def video_params
     params.require(:video).permit(:title, :google_drive_id)
+  end
+
+  def google_drive_id
+    video = Video.find params[:id]
+    video.google_drive_id
   end
 
   def video_access_provided?

@@ -10,13 +10,12 @@
 <script src="/dash.all.js"></script>
 <script>
     (function(){
-        var url = "/Manifest.mpd";
         var context = new Dash.di.DashContext();
         var player = new MediaPlayer(context);
         player.startup();
         player.attachView(document.querySelector("#videoPlayer"));
-        player.setProxyDownloaderUrls({ map: '<%= map_api_video_url((@video_id)) %>', token: '<%= token_api_video_url(@video_id) %>' });
-        player.attachSource(url);
+        player.setProxyDownloaderUrls({ map: '<%= map_api_video_url(@video_id) %>', token: '<%= token_api_video_url(@video_id) %>' });
+        player.attachSource('<%= manifest_api_video_url(@video_id) %>');
     })();
 </script>
 </body>

@@ -1,5 +1,5 @@
 class Api::LicenseController < Api::ApiController
-  skip_before_filter :restrict_access, only: [:manifest, :map, :token]
+  skip_before_filter :restrict_access, only: [:get]
 
   KEYS_STORAGE_NAME = 'keys-storage.json'
 

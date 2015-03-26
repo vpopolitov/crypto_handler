@@ -1,6 +1,6 @@
 class Api::VideosController < Api::ApiController
   skip_before_filter :restrict_access, only: [:manifest, :map, :token]
-  #before_action :check_access_code, only: [:manifest, :map, :token]
+  before_action :check_access_code, only: [:manifest, :map, :token]
 
   def index
     render json: Video.uncategorized, each_serializer: VideoSerializer, root: false, status: :ok

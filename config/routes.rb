@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   end
   
   namespace :api do
+    get 'license' => 'license#get'
     resources :videos, only: [:index, :create, :update, :destroy] do
       member do
         get 'manifest'
@@ -23,7 +24,6 @@ Rails.application.routes.draw do
 
   get '/signin' => 'sessions#new'
   delete '/signout' => 'sessions#destroy'
-  get '/license' => 'api/license#get'
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -15,12 +15,12 @@ class GoogleApiClient
     def get_drive
       drive = nil
       if File.exists? cached_file
-        $stderr.puts 'drive api from cache'
+        logger.debug 'drive api from cache'
         File.open(cached_file) do |file|
           drive = Marshal.load(file)
         end
       else
-        $stderr.puts 'drive api retrieving from server'
+        logger.debug 'drive api retrieving from server'
         drive = client.discovered_api('drive', API_VERSION)
         File.open(cached_file, 'w') do |file|
           Marshal.dump(drive, file)
@@ -34,6 +34,9 @@ class GoogleApiClient
     end
 
     def token
+      logger.debug 'access token fetching'
+      client.authorization.fetch_access_token!
+      logger.debug 'access token fetched'
       client.authorization.access_token
     end
     
@@ -52,12 +55,12 @@ class GoogleApiClient
 
       storage = ENV['AUTHORIZATION_STORAGE']
       if storage
-        $stderr.puts 'client authorization from storage started'
+        logger.debug 'client authorization from storage started'
         options = JSON.parse(storage)
         client.authorization = Signet::OAuth2::Client.new(options)
-        $stderr.puts 'client authorization from storage completed'
+        logger.debug 'client authorization from storage completed'
       else
-        $stderr.puts 'client authorization started'
+        logger.debug 'client authorization started'
         key = Google::APIClient::KeyUtils.load_key(private_key, 'notasecret') do |c, p|
           OpenSSL::PKey::RSA.new c, p
         end
@@ -67,11 +70,11 @@ class GoogleApiClient
           :scope => 'https://www.googleapis.com/auth/drive',
           :issuer => client_email,
           :signing_key => key)
-        $stderr.puts 'access token fetching'
+        logger.debug 'access token fetching'
         client.authorization.fetch_access_token!
-        $stderr.puts 'access token fetched'
+        logger.debug 'access token fetched'
         ENV['AUTHORIZATION_STORAGE'] = client.authorization.to_json
-        $stderr.puts 'client authorization completed'
+        logger.debug 'client authorization completed'
       end
       
       client

@@ -15,12 +15,12 @@ class GoogleApiClient
     def get_drive
       drive = nil
       if File.exists? cached_file
-        logger.debug 'drive api from cache'
+        Rails.logger.debug 'drive api from cache'
         File.open(cached_file) do |file|
           drive = Marshal.load(file)
         end
       else
-        logger.debug 'drive api retrieving from server'
+        Rails.logger.debug 'drive api retrieving from server'
         drive = client.discovered_api('drive', API_VERSION)
         File.open(cached_file, 'w') do |file|
           Marshal.dump(drive, file)
@@ -34,9 +34,9 @@ class GoogleApiClient
     end
 
     def token
-      logger.debug 'access token fetching'
+      Rails.logger.debug 'access token fetching'
       client.authorization.fetch_access_token!
-      logger.debug 'access token fetched'
+      Rails.logger.debug 'access token fetched'
       client.authorization.access_token
     end
     
@@ -55,12 +55,12 @@ class GoogleApiClient
 
       storage = ENV['AUTHORIZATION_STORAGE']
       if storage
-        logger.debug 'client authorization from storage started'
+        Rails.logger.debug 'client authorization from storage started'
         options = JSON.parse(storage)
         client.authorization = Signet::OAuth2::Client.new(options)
-        logger.debug 'client authorization from storage completed'
+        Rails.logger.debug 'client authorization from storage completed'
       else
-        logger.debug 'client authorization started'
+        Rails.logger.debug 'client authorization started'
         key = Google::APIClient::KeyUtils.load_key(private_key, 'notasecret') do |c, p|
           OpenSSL::PKey::RSA.new c, p
         end
@@ -70,11 +70,11 @@ class GoogleApiClient
           :scope => 'https://www.googleapis.com/auth/drive',
           :issuer => client_email,
           :signing_key => key)
-        logger.debug 'access token fetching'
+        Rails.logger.debug 'access token fetching'
         client.authorization.fetch_access_token!
-        logger.debug 'access token fetched'
+        Rails.logger.debug 'access token fetched'
         ENV['AUTHORIZATION_STORAGE'] = client.authorization.to_json
-        logger.debug 'client authorization completed'
+        Rails.logger.debug 'client authorization completed'
       end
       
       client

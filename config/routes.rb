@@ -11,7 +11,6 @@ Rails.application.routes.draw do
   end
   
   namespace :api do
-    get 'license' => 'license#get'
     resources :videos, only: [:index, :create, :update, :destroy] do
       member do
         get 'manifest'

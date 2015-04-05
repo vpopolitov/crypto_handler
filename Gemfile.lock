@@ -39,6 +39,7 @@ GEM
       execjs
       json
     bcrypt (3.1.10)
+    bindata (2.1.0)
     bootstrap-editable-rails (0.0.7)
       railties (>= 3.1)
     bootstrap-sass (3.3.3)
@@ -99,6 +100,8 @@ GEM
     multipart-post (2.0.0)
     pg (0.18.1)
     rack (1.5.2)
+    rack-mount (0.8.3)
+      rack (>= 1.0.0)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.1.6)
@@ -182,6 +185,7 @@ DEPENDENCIES
   active_model_serializers
   autoprefixer-rails
   bcrypt (~> 3.1.0)
+  bindata (~> 2.1.0)
   bootstrap-editable-rails
   bootstrap-sass (~> 3.3.3)
   coffee-rails (~> 4.0.0)
@@ -191,6 +195,7 @@ DEPENDENCIES
   jquery-rails
   js-routes
   pg
+  rack-mount (~> 0.8.0)
   rails (= 4.1.6)
   rails-api
   rails_12factor

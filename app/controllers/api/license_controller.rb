@@ -5,6 +5,8 @@ class Api::LicenseController < Api::ApiController
   KEYS_STORAGE_NAME = 'keys-storage.json'
 
   def post
+    logger.debug "#{request.body.read}"
+
     mapped_keys = Hash[keys_storage.map { |k, v| [k.gsub('-', ''), v] }]
     kids = params['kids'].map do |kid|
       Base64.decode64(kid.gsub('-', '+').gsub('_', '/')).unpack('H*').first

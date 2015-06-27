@@ -45,3 +45,6 @@ gem 'typhoeus'
 gem 'rails_12factor', group: :production
 gem 'active_model_serializers'
 gem 'bcrypt', '~> 3.1.0'
+gem 'rack-mount', '~> 0.8.0'
+gem 'bindata', '~> 2.1.0'
+gem 'nokogiri'

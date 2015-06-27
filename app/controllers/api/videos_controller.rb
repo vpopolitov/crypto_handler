@@ -1,6 +1,7 @@
 class Api::VideosController < Api::ApiController
   skip_before_filter :restrict_access, only: [:manifest, :map, :token, :mpd]
   #before_action :check_access_code, only: [:manifest, :map, :token, :mpd]
+  after_filter :cors_set_access_control_headers
 
   def index
     render json: Video.uncategorized, each_serializer: VideoSerializer, root: false, status: :ok
@@ -102,5 +103,11 @@ class Api::VideosController < Api::ApiController
 
   def access_code_cookie_name(id)
     "access_code_token_#{Digest::SHA256.hexdigest(id.to_s)}"
+  end
+
+  def cors_set_access_control_headers
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE, OPTIONS'
+    headers['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept, Authorization, Token'
   end
 end

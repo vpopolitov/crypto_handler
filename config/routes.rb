@@ -16,6 +16,7 @@ Rails.application.routes.draw do
         get 'manifest'
         get 'map'
         get 'token'
+        get 'mpd'
       end
     end
     resources :categories, only: [:index, :create, :update, :destroy]

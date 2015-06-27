@@ -1,6 +1,6 @@
 class Api::VideosController < Api::ApiController
-  skip_before_filter :restrict_access, only: [:manifest, :map, :token]
-  before_action :check_access_code, only: [:manifest, :map, :token]
+  skip_before_filter :restrict_access, only: [:manifest, :map, :token, :mpd]
+  before_action :check_access_code, only: [:manifest, :map, :token, :mpd]
 
   def index
     render json: Video.uncategorized, each_serializer: VideoSerializer, root: false, status: :ok
@@ -59,6 +59,25 @@ class Api::VideosController < Api::ApiController
 
   def token
     render json: { access_token: GoogleApiClient.token }, status: :ok
+  end
+
+  def mpd
+    token = GoogleApiClient.token
+    drive = GoogleApiClient.get_drive
+    res = GoogleApiClient.execute api_method: drive.files.list, parameters: { q: "'#{google_drive_id}' in parents" }
+    hash = res.data.items.inject({}) do |memo, i|
+      memo[i.originalFilename] = i.downloadUrl
+      memo
+    end
+
+    manifest = res.data.items.find { |i| i.originalFilename.match /.+\.mpd/ }
+    manifest_file = GoogleApiClient.execute uri: manifest.download_url
+    manifest_xml = Nokogiri::XML(manifest_file.body)
+    manifest_xml.css('MPD Period AdaptationSet Representation BaseURL').each do |url|
+      url.content = hash[url.content]
+    end
+
+    render json: { mpd: manifest_xml.to_xml, access_token: token }, status: :ok
   end
   
   private

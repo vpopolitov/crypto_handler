@@ -23,20 +23,38 @@ class LicenseChecker
     res = env[POST_BODY].read
     return [{}.to_json] unless res.present?
 
-    pssh_box = Dash::PsshBox.read(res)
+    # pssh_box = Dash::PsshBox.read(res)
+    #
+    # mapped_keys = Hash[keys_storage.map { |k, v| [k.gsub('-', ''), v] }]
+    # jwk_array = pssh_box.kids.inject([]) do |memo, key_id|
+    #   jwk = {
+    #       kty: 'oct',
+    #       alg: 'A128KW',
+    #       kid: [[key_id].pack('H*')].pack('m0').gsub('=', ''),
+    #       k: [[mapped_keys[key_id]].pack('H*')].pack('m0').gsub('=', '')
+    #   }
+    #   memo.push jwk
+    # end
+    #
+    # [{ keys: jwk_array }.to_json]
 
     mapped_keys = Hash[keys_storage.map { |k, v| [k.gsub('-', ''), v] }]
-    jwk_array = pssh_box.kids.inject([]) do |memo, key_id|
+    kids = JSON.parse(res)['kids'].map do |kid|
+      Base64.decode64(kid.gsub('-', '+').gsub('_', '/')).unpack('H*').first
+    end
+
+    jwk_array = kids.inject([]) do |memo, key_id|
       jwk = {
           kty: 'oct',
           alg: 'A128KW',
-          kid: [[key_id].pack('H*')].pack('m0').gsub('=', ''),
-          k: [[mapped_keys[key_id]].pack('H*')].pack('m0').gsub('=', '')
+          kid: [[key_id].pack('H*')].pack('m0').gsub('=', '').gsub('+', '-').gsub('/', '_'),
+          k: [[mapped_keys[key_id]].pack('H*')].pack('m0').gsub('=', '').gsub('+', '-').gsub('/', '_')
       }
       memo.push jwk
     end
 
     [{ keys: jwk_array }.to_json]
+
   end
 
   def keys_storage

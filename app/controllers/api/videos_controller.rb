@@ -78,7 +78,7 @@ class Api::VideosController < Api::ApiController
       url.content = hash[url.content]
     end
 
-    render json: { mpd: manifest_xml.to_xml, access_token: token }, status: :ok
+    render xml: manifest_xml.to_xml
   end
   
   private

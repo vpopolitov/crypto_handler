@@ -6,12 +6,8 @@ class Api::LicenseController < Api::ApiController
 
   def post
     body = request.body.read
-    logger.debug "Body: #{body}"
-    logger.debug "Body: #{body.class}"
-    logger.debug "Body: #{JSON.parse(body)}"
-
     mapped_keys = Hash[keys_storage.map { |k, v| [k.gsub('-', ''), v] }]
-    kids = params['kids'].map do |kid|
+    kids = JSON.parse(body)['kids'].map do |kid|
       Base64.decode64(kid.gsub('-', '+').gsub('_', '/')).unpack('H*').first
     end
 

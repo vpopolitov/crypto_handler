@@ -20,6 +20,8 @@ Rails.application.routes.draw do
       end
     end
     resources :categories, only: [:index, :create, :update, :destroy]
+
+    post 'license' => 'license#post'
   end
 
   get '/signin' => 'sessions#new'

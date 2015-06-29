@@ -16,12 +16,9 @@
 </body>
 <!--<script src="load.js"></script>-->
 <script>
-//    var tokenUrl = 'https://stormy-coast-4639.herokuapp.com/api/videos/15/token';
-//    var mpdUrl = 'https://stormy-coast-4639.herokuapp.com/api/videos/15/mpd';
-//    var licenseServerUrl = 'https://stormy-coast-4639.herokuapp.com/api/license';
-    var tokenUrl = <%= token_api_video_url(@video_id) %>;
-    var mpdUrl = <%=  mpd_api_video_url(@video_id) %>;
-    var licenseServerUrl = <%= api_license_url %>;
+    var tokenUrl = '<%= token_api_video_url(@video_id) %>';
+    var mpdUrl = '<%= mpd_api_video_url(@video_id) %>';
+    var licenseServerUrl = '<%= api_license_url %>';
 
     function init() {
         shaka.util.Auth.setAuthUrl(tokenUrl);

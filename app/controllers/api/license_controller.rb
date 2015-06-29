@@ -1,5 +1,6 @@
 class Api::LicenseController < Api::ApiController
   skip_before_filter :restrict_access, only: [:post]
+  before_action :check_access_code, only: [:post]
   after_filter :cors_set_access_control_headers
 
   KEYS_STORAGE_NAME = 'keys-storage.json'

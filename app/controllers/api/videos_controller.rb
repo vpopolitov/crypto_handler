@@ -1,6 +1,6 @@
 class Api::VideosController < Api::ApiController
   skip_before_filter :restrict_access, only: [:manifest, :map, :token, :mpd]
-  #before_action :check_access_code, only: [:manifest, :map, :token, :mpd]
+  before_action :check_access_code, only: [:manifest, :map, :token, :mpd]
   after_filter :cors_set_access_control_headers
 
   def index
@@ -91,17 +91,5 @@ class Api::VideosController < Api::ApiController
   def google_drive_id
     video = Video.find params[:id]
     video.google_drive_id
-  end
-
-  def video_access_provided?
-    cookies.signed[access_code_cookie_name(params[:id])] == params[:id]
-  end
-
-  def check_access_code
-    head :unauthorized unless video_access_provided?
-  end
-
-  def access_code_cookie_name(id)
-    "access_code_token_#{Digest::SHA256.hexdigest(id.to_s)}"
   end
 end

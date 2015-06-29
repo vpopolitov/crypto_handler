@@ -1,22 +1,70 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-  <title>Dash.js Rocks</title>
+  <meta charset="utf-8">
+  <title>TurtleTube - Basic Test</title>
+  <!-- Load the Shaka Player library. -->
+  <script src="shaka-player.compiled.js"></script>
 </head>
 <body>
-<div>
-  <video id="videoPlayer" controls="true"></video>
-</div>
-<script src="/dash.all.js"></script>
-<script>
-    (function(){
-        var context = new Dash.di.DashContext();
-        var player = new MediaPlayer(context);
-        player.startup();
-        player.attachView(document.querySelector("#videoPlayer"));
-        player.setProxyDownloaderUrls({ map: '<%= map_api_video_url(@video_id) %>', token: '<%= token_api_video_url(@video_id) %>' });
-        player.attachSource('<%= manifest_api_video_url(@video_id) %>');
-    })();
-</script>
+<video id="video"
+       width="640" height="480"
+       crossorigin="anonymous"
+       controls>
+  Your browser does not support HTML5 video.
+</video>
 </body>
+<!--<script src="load.js"></script>-->
+<script>
+    var tokenUrl = 'https://stormy-coast-4639.herokuapp.com/api/videos/15/token';
+    var mpdUrl = 'https://stormy-coast-4639.herokuapp.com/api/videos/15/mpd';
+    var licenseServerUrl = 'https://stormy-coast-4639.herokuapp.com/api/license';
+
+    function init() {
+        shaka.util.Auth.setAuthUrl(tokenUrl);
+        shaka.util.Auth.setTokenAsync().then(function() {
+            initPlayer();
+        }, function(Error) {
+            console.log(Error);
+        });
+    }
+
+    function initPlayer() {
+        shaka.polyfill.installAll();
+        var video = document.getElementById('video');
+        var player = new shaka.player.Player(video);
+        window.player = player;
+        player.addEventListener('error', function(event) {
+            console.error(event);
+        });
+        var estimator = new shaka.util.EWMABandwidthEstimator();
+        var source = new shaka.player.DashVideoSource(mpdUrl, interpretContentProtection, estimator);
+        player.load(source);
+    }
+
+    function interpretContentProtection(contentProtection) {
+        var initDataOverride = null;
+        if (contentProtection.pssh && contentProtection.pssh.psshBox) {
+            initDataOverride = {
+                initData: contentProtection.pssh.psshBox,
+                initDataType: 'cenc'
+            };
+            console.info('Found overridden PSSH with system IDs:',
+                    contentProtection.pssh.parsedPssh.systemIds);
+        }
+
+        if (contentProtection.schemeIdUri == 'urn:mpeg:dash:mp4protection:2011') {
+            var keySystem = 'org.w3.clearkey';
+            return new shaka.player.DrmSchemeInfo(keySystem,
+                    licenseServerUrl,
+                    false /* withCredentials */,
+                    initDataOverride);
+        }
+
+        console.warn('Unrecognized scheme: ' + contentProtection.schemeIdUri);
+        return null;
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+</script>
 </html>

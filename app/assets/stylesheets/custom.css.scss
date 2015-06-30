@@ -1,8 +1,13 @@
 @import "bootstrap";
 
-@mixin div-with-button {
+@mixin wide-fixed-div {
   display: inline-block;
   width: 25%;
+}
+
+@mixin narrow-fixed-div {
+  display: inline-block;
+  width: 6%;
 }
 
 @mixin custom-editable {
@@ -23,7 +28,7 @@ html {
 
 .panel-heading {
   .panel-title {
-    @include div-with-button;
+    @include wide-fixed-div;
     a {
       text-decoration: none;
       &:hover {
@@ -35,7 +40,7 @@ html {
 
 .panel-body {
   .video-title {
-    @include div-with-button;
+    @include wide-fixed-div;
   }
 }
 
@@ -76,8 +81,15 @@ a.editable-click, a.editable-empty {
   }
 }
 
+.video-code {
+  @include narrow-fixed-div;
+}
+
 .signout {
   float: right !important;
   position: relative;
   margin-top: 100px;
+  a:hover {
+    text-decoration: none;
+  }
 }

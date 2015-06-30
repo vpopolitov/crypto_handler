@@ -4,6 +4,7 @@
     </div>
 
     {{#if signed_in}}
+        <div class="video-code">{{video.access_code}}</div>
         <button class="btn btn-danger category-delete" data-url="{{api_video_path video.id}}">Удалить</button>
     {{/if}}
 </li>

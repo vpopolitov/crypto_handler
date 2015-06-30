@@ -1,5 +1,11 @@
 <div class="jumbotron">
   <div class="container">
+    <% if signed_in? %>
+      <div class="signout">
+        <%= link_to "Выход", signout_path, method: "delete" %>
+      </div>
+    <% end %>
+
     <h1>Курс лекций</h1>
     <p>Школа кройки и шитья "Престиж" представляет курс онлайн-лекций</p>
   </div>
